@@ -48,7 +48,7 @@ const Navigation = () => {
   return (
     <div className="App">
       <NavBar>
-        <TitleText>CERTICOS BOOKS</TitleText>
+        <TitleText>BOOKS BOOKS</TitleText>
         <TabList>
           <TabItem>
             <StyledLink to="/">도서 검색</StyledLink>

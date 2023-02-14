@@ -8,6 +8,7 @@ import Navigation from "./components/common/Navigation";
 import CommonPagination from "./components/common/Pagination";
 import SearchIcon from "./components/common/SearchIcon";
 import { bookResponseType, books, bookRequestType } from "./types";
+import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 
 const SearchWrapper = styled.div`
   display: flex;
@@ -130,11 +131,15 @@ const KeywordInput = styled(Input)`
   width: 200px;
 `;
 
+const HeartWrapper = styled.div`
+  margin-right: 16px;
+`;
+
 const App = () => {
   const [current, setCurrent] = useState(1);
   const [keyword, setKeyword] = useState("");
   const [detailKeyword, setDetailKeyword] = useState("");
-
+  const [isHeartClick, setIsHeartClick] = useState(false);
   const [searchTarget, setSearchTarget] =
     useState<bookRequestType["target"]>("title");
   const [bookList, setBookList] = useState<bookResponseType>({});
@@ -251,6 +256,22 @@ const App = () => {
                   </BookItemWrapper>
                   <BookItemWrapper>
                     <PriceText>{b?.price?.toLocaleString("ko-KR")}원</PriceText>
+                    <HeartWrapper>
+                      // TODO: 찜한 상태인 지 확인하는 데이터 추가 후 수정하자
+                      {isHeartClick ? (
+                        <HeartFilled
+                          onClick={(): void => {
+                            setIsHeartClick(false);
+                          }}
+                        ></HeartFilled>
+                      ) : (
+                        <HeartOutlined
+                          onClick={(): void => {
+                            setIsHeartClick(true);
+                          }}
+                        />
+                      )}
+                    </HeartWrapper>
                     <ShortMarginButton>
                       <CommonButton
                         title={"구매하기"}
