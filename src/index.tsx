@@ -7,6 +7,7 @@ import { ThemeProvider } from "styled-components";
 import theme from "./style/theme";
 import GlobalStyle from "./style/global";
 import WishList from "./page/wishList";
+import { RecoilRoot } from "recoil";
 
 const router = createBrowserRouter([
   {
@@ -21,10 +22,12 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />
-      <GlobalStyle />
-    </ThemeProvider>
+    <RecoilRoot>
+      <ThemeProvider theme={theme}>
+        <RouterProvider router={router} />
+        <GlobalStyle />
+      </ThemeProvider>
+    </RecoilRoot>
   </React.StrictMode>
 );
 

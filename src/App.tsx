@@ -191,6 +191,16 @@ const App = () => {
   const handleDetailKeywordChange = (e: any) => {
     setDetailKeyword(e.target.value);
   };
+
+  const handleHeartClickEvent = () => {
+    console.log("하트클릭");
+    setIsHeartClick(true);
+  };
+
+  const handleHeartRemove = () => {
+    setIsHeartClick(false);
+  };
+
   return (
     <div>
       <Navigation />
@@ -257,19 +267,10 @@ const App = () => {
                   <BookItemWrapper>
                     <PriceText>{b?.price?.toLocaleString("ko-KR")}원</PriceText>
                     <HeartWrapper>
-                      // TODO: 찜한 상태인 지 확인하는 데이터 추가 후 수정하자
                       {isHeartClick ? (
-                        <HeartFilled
-                          onClick={(): void => {
-                            setIsHeartClick(false);
-                          }}
-                        ></HeartFilled>
+                        <HeartFilled onClick={handleHeartRemove}></HeartFilled>
                       ) : (
-                        <HeartOutlined
-                          onClick={(): void => {
-                            setIsHeartClick(true);
-                          }}
-                        />
+                        <HeartOutlined onClick={handleHeartClickEvent} />
                       )}
                     </HeartWrapper>
                     <ShortMarginButton>
