@@ -1,14 +1,12 @@
-import { Button, Input, Modal, PaginationProps, Select } from "antd";
+import { Button, Input, Modal, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getAllList, getDetailList } from "./api/main";
-import BookIcon from "./components/common/BookIcon";
 import CommonButton from "./components/common/Button";
 import Navigation from "./components/common/Navigation";
-import CommonPagination from "./components/common/Pagination";
 import SearchIcon from "./components/common/SearchIcon";
-import { bookResponseType, books, bookRequestType } from "./types";
-import { HeartOutlined, HeartFilled } from "@ant-design/icons";
+import { bookResponseType, bookRequestType } from "./types";
+import ItemList from "./components/main/ItemList";
 
 const SearchWrapper = styled.div`
   display: flex;
@@ -45,12 +43,6 @@ const StyledInput = styled(Input)`
     border-radius: 100px;
   }
 `;
-
-const SearchCountTextWrapper = styled.div`
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 36px;
-`;
 export const SearchCountText = styled.p`
   color: ${(props) => props.theme.textPrimary};
   font-size: ${(props) => props.theme.caption};
@@ -64,53 +56,6 @@ export const SearchCountNumberText = styled.p`
 `;
 export const SearchCountNumber = styled.span`
   color: ${(props) => props.theme.primary};
-`;
-
-const BookListItemWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 960px;
-  border-bottom: 1px solid #d2d6da;
-`;
-
-const BookItemWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const BookImage = styled.img`
-  width: 48px;
-  height: 68px;
-  margin-right: 48px;
-`;
-
-const BoldText = styled.p`
-  color: ${(props) => props.theme.textPrimary};
-  font-size: ${(props) => props.theme.title3};
-  font-weight: ${(props) => props.theme.bold};
-`;
-
-const PriceText = styled(BoldText)`
-  margin-right: 56px;
-`;
-
-const AuthorText = styled.p`
-  color: ${(props) => props.theme.textSecondary};
-  font-size: ${(props) => props.theme.body2};
-  line-height: 14px;
-  margin-left: 16px;
-`;
-
-const ShortMarginButton = styled.div`
-  button:first-child {
-    margin-right: 8px;
-  }
-`;
-
-const PaginationWrapper = styled.footer`
-  margin-top: 60px;
 `;
 
 export const NoDataText = styled.p`
@@ -131,15 +76,10 @@ const KeywordInput = styled(Input)`
   width: 200px;
 `;
 
-const HeartWrapper = styled.div`
-  margin-right: 16px;
-`;
-
 const App = () => {
   const [current, setCurrent] = useState(1);
   const [keyword, setKeyword] = useState("");
   const [detailKeyword, setDetailKeyword] = useState("");
-  const [isHeartClick, setIsHeartClick] = useState(false);
   const [searchTarget, setSearchTarget] =
     useState<bookRequestType["target"]>("title");
   const [bookList, setBookList] = useState<bookResponseType>({});
@@ -158,10 +98,6 @@ const App = () => {
     setIsModalOpen(false);
   };
 
-  const handlePagination: PaginationProps["onChange"] = (page) => {
-    setCurrent(page);
-  };
-
   const handleDetailSearch = async () => {
     const result: bookResponseType = await getDetailList(
       searchTarget,
@@ -176,7 +112,6 @@ const App = () => {
   const handleTotalSearch = async () => {
     const result: bookResponseType = await getAllList(keyword, current);
     if (bookList.documents?.length > 0) setBookList({});
-
     setBookList(result);
   };
 
@@ -190,15 +125,6 @@ const App = () => {
 
   const handleDetailKeywordChange = (e: any) => {
     setDetailKeyword(e.target.value);
-  };
-
-  const handleHeartClickEvent = () => {
-    console.log("하트클릭");
-    setIsHeartClick(true);
-  };
-
-  const handleHeartRemove = () => {
-    setIsHeartClick(false);
   };
 
   return (
@@ -242,68 +168,13 @@ const App = () => {
           ></KeywordInput>
         </Modal>
       </SearchWrapper>
-
-      <ResultWrapper>
-        <SearchCountTextWrapper>
-          <SearchCountText>도서 검색 결과</SearchCountText>
-          <SearchCountNumberText>
-            총
-            <SearchCountNumber>
-              {bookList?.meta?.total_count?.toLocaleString("ko-KR") || 0}
-            </SearchCountNumber>
-            건
-          </SearchCountNumberText>
-        </SearchCountTextWrapper>
-        {bookList?.documents?.length > 0 ? (
-          <>
-            {bookList?.documents?.map((b: books) => {
-              return (
-                <BookListItemWrapper key={b.isbn}>
-                  <BookItemWrapper>
-                    <BookImage src={b.thumbnail}></BookImage>
-                    <BoldText>{b.title}</BoldText>
-                    <AuthorText>{b?.authors?.join(",")}</AuthorText>
-                  </BookItemWrapper>
-                  <BookItemWrapper>
-                    <PriceText>{b?.price?.toLocaleString("ko-KR")}원</PriceText>
-                    <HeartWrapper>
-                      {isHeartClick ? (
-                        <HeartFilled onClick={handleHeartRemove}></HeartFilled>
-                      ) : (
-                        <HeartOutlined onClick={handleHeartClickEvent} />
-                      )}
-                    </HeartWrapper>
-                    <ShortMarginButton>
-                      <CommonButton
-                        title={"구매하기"}
-                        type={"primary"}
-                        onClick={() => {
-                          window.open(b.url);
-                        }}
-                      ></CommonButton>
-                    </ShortMarginButton>
-                  </BookItemWrapper>
-                </BookListItemWrapper>
-              );
-            })}
-
-            <PaginationWrapper>
-              <CommonPagination
-                defaultCurrent={1}
-                current={current}
-                onChange={handlePagination}
-                pageSize={10}
-                total={bookList?.meta?.total_count}
-              />
-            </PaginationWrapper>
-          </>
-        ) : (
-          <>
-            <BookIcon />
-            <NoDataText>검색된 결과가 없습니다.</NoDataText>
-          </>
-        )}
-      </ResultWrapper>
+      {bookList?.documents?.length > 0 ? (
+        <ItemList list={bookList} />
+      ) : (
+        <>
+          <NoDataText>검색된 결과가 없습니다.</NoDataText>
+        </>
+      )}
     </div>
   );
 };
