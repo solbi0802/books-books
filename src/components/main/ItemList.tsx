@@ -84,35 +84,34 @@ const HeartWrapper = styled.div`
   margin-right: 16px;
 `;
 
-const ItemList = (props) => {
+const ItemList = (props: any) => {
   const { list } = props;
   const [current, setCurrent] = useState(1);
-  const [isHeartClick, setIsHeartClick] = useState(false);
-  const [wishData, setWishData] = useState([]);
-
+  const [heartClickList, setHeartClickList] = useState([]);
+  const [isWishAdd, setIsWishAdd] = useState(false);
   const [itemList, setItemList] = useState<bookResponseType>(list);
 
   useEffect(() => {
     console.log("props", props);
-    console.log("item", list);
     setItemList(list);
   }, []);
   const handlePagination: PaginationProps["onChange"] = (page) => {
     setCurrent(page);
   };
 
-  const handleHeartClickEvent = (id: string) => {
-    console.log("하트클릭");
-    setIsHeartClick(true);
-    const data = [];
-    data.push({ id });
-    console.log("data", data);
-    setWishData(...data);
-  };
-
-  const handleHeartRemove = () => {
-    console.log("wishData", wishData);
-    setIsHeartClick(false);
+  const wishListHandler = (id: string) => {
+    if (!isWishAdd) {
+      // 찜하기 목록 추가
+      console.log("하트클릭", id);
+      setHeartClickList([...heartClickList, id]);
+      console.log("찜 목록에 추가되었습니다.");
+    } else {
+      //찜하기 목록 삭제
+      const removeList = heartClickList.filter((h) => h !== id);
+      console.log("찜 목록에 삭제되었습니다.");
+      setHeartClickList(removeList);
+    }
+    setIsWishAdd((prev) => !prev);
   };
 
   return (
@@ -139,13 +138,13 @@ const ItemList = (props) => {
             <BookItemWrapper>
               <PriceText>{b?.price?.toLocaleString("ko-KR")}원</PriceText>
               <HeartWrapper>
-                {isHeartClick ? (
-                  <HeartFilled onClick={handleHeartRemove}></HeartFilled>
-                ) : (
-                  <button onClick={handleHeartClickEvent(b?.isbn)}>
-                    <HeartOutlined />
-                  </button>
-                )}
+                <button
+                  onClick={() => {
+                    wishListHandler(b.isbn);
+                  }}
+                >
+                  <HeartOutlined />
+                </button>
               </HeartWrapper>
               <ShortMarginButton>
                 <CommonButton
