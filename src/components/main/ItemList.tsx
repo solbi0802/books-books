@@ -93,6 +93,11 @@ const ItemList = (props: any) => {
 
   useEffect(() => {
     console.log("props", props);
+    const wishList = localStorage.getItem("wishList");
+    console.log("localStorageData", wishList);
+    /* wishList에 있는 id값과 list의 isbn값이 같다면
+    list 데이터에 isZzimData값을 true로 주기
+    */
     setItemList(list);
   }, []);
   const handlePagination: PaginationProps["onChange"] = (page) => {
@@ -104,14 +109,16 @@ const ItemList = (props: any) => {
       // 찜하기 목록 추가
       console.log("하트클릭", id);
       setHeartClickList([...heartClickList, id]);
+      localStorage.setItem("wishList", [...heartClickList, id]);
       console.log("찜 목록에 추가되었습니다.");
     } else {
       //찜하기 목록 삭제
       const removeList = heartClickList.filter((h) => h !== id);
       console.log("찜 목록에 삭제되었습니다.");
+      localStorage.setItem("wishList", [removeList]);
       setHeartClickList(removeList);
     }
-    setIsWishAdd((prev) => !prev);
+    setIsWishAdd(!isWishAdd);
   };
 
   return (
