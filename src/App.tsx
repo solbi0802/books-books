@@ -5,7 +5,7 @@ import { getAllList, getDetailList } from "./api/main";
 import CommonButton from "./components/common/Button";
 import Navigation from "./components/common/Navigation";
 import SearchIcon from "./components/common/SearchIcon";
-import { bookResponseType, bookRequestType } from "./types";
+import { BookResponseType, BookRequestType } from "./types";
 import ItemList from "./components/main/ItemList";
 
 const SearchWrapper = styled.div`
@@ -81,8 +81,8 @@ const App = () => {
   const [keyword, setKeyword] = useState("");
   const [detailKeyword, setDetailKeyword] = useState("");
   const [searchTarget, setSearchTarget] =
-    useState<bookRequestType["target"]>("title");
-  const [bookList, setBookList] = useState<bookResponseType>({});
+    useState<BookRequestType["target"]>("title");
+  const [bookList, setBookList] = useState<BookResponseType>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -99,7 +99,7 @@ const App = () => {
   };
 
   const handleDetailSearch = async () => {
-    const result: bookResponseType = await getDetailList(
+    const result: BookResponseType = await getDetailList(
       searchTarget,
       detailKeyword,
       current
@@ -110,12 +110,12 @@ const App = () => {
     setIsModalOpen(false);
   };
   const handleTotalSearch = async () => {
-    const result: bookResponseType = await getAllList(keyword, current);
+    const result: BookResponseType = await getAllList(keyword, current);
     if (bookList.documents?.length > 0) setBookList({});
     setBookList(result);
   };
 
-  const handleSelectChange = (value: bookRequestType["target"]) => {
+  const handleSelectChange = (value: BookRequestType["target"]) => {
     setSearchTarget(value);
   };
 

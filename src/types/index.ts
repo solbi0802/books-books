@@ -1,15 +1,15 @@
-export interface bookResponseType {
-  meta?: metaData;
+export interface BookResponseType {
+  meta?: MetaData;
   documents?: any;
 }
 
-export interface metaData {
+export interface MetaData {
   is_end?: boolean;
   pageable_count?: number;
   total_count?: number;
 }
 
-export interface books {
+export interface Books {
   authors?: Array<string>;
   contents?: string;
   title?: string;
@@ -18,10 +18,10 @@ export interface books {
   sale_price?: number;
   thumbnail?: string;
   url?: string;
-  isbn?: number;
+  isbn?: string;
 }
 
-export interface bookRequestType {
+export interface BookRequestType {
   target: "title" | "person" | "publisher" | "isbn";
   query: string;
   page?: number;

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CommonButton from "../common/Button";
 import CommonPagination from "../common/Pagination";
-import { bookResponseType, books } from "../../types";
+import { BookResponseType, Books } from "../../types";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 
 export const ResultWrapper = styled.div`
@@ -87,9 +87,9 @@ const HeartWrapper = styled.div`
 const ItemList = (props: any) => {
   const { list } = props;
   const [current, setCurrent] = useState(1);
-  const [heartClickList, setHeartClickList] = useState([]);
+  // const [heartClickList, setHeartClickList] =useState<Books[]|null>(null)
   const [isWishAdd, setIsWishAdd] = useState(false);
-  const [itemList, setItemList] = useState<bookResponseType>(list);
+  const [itemList, setItemList] = useState<BookResponseType>(list);
 
   useEffect(() => {
     console.log("props", props);
@@ -104,22 +104,22 @@ const ItemList = (props: any) => {
     setCurrent(page);
   };
 
-  const wishListHandler = (id: string) => {
-    if (!isWishAdd) {
-      // 찜하기 목록 추가
-      console.log("하트클릭", id);
-      setHeartClickList([...heartClickList, id]);
-      localStorage.setItem("wishList", [...heartClickList, id]);
-      console.log("찜 목록에 추가되었습니다.");
-    } else {
-      //찜하기 목록 삭제
-      const removeList = heartClickList.filter((h) => h !== id);
-      console.log("찜 목록에 삭제되었습니다.");
-      localStorage.setItem("wishList", [removeList]);
-      setHeartClickList(removeList);
-    }
-    setIsWishAdd(!isWishAdd);
-  };
+  // const wishListHandler = (id: string) => {
+  //   if (!isWishAdd) {
+  //     // 찜하기 목록 추가
+  //     console.log("하트클릭", id);
+  //     setHeartClickList(heartClickList, id);
+  //     localStorage.setItem("wishList", [...heartClickList, id]);
+  //     console.log("찜 목록에 추가되었습니다.");
+  //   } else {
+  //     //찜하기 목록 삭제
+  //     const removeList = heartClickList.filter((h) => h !== id);
+  //     console.log("찜 목록에 삭제되었습니다.");
+  //     localStorage.setItem("wishList", [removeList]);
+  //     setHeartClickList(removeList);
+  //   }
+  //   setIsWishAdd(!isWishAdd);
+  // };
 
   return (
     <ResultWrapper>
@@ -134,7 +134,7 @@ const ItemList = (props: any) => {
         </SearchCountNumberText>
       </SearchCountTextWrapper>
 
-      {itemList?.documents?.map((b: books) => {
+      {itemList?.documents?.map((b: Books) => {
         return (
           <BookListItemWrapper key={b.isbn}>
             <BookItemWrapper>
@@ -147,7 +147,7 @@ const ItemList = (props: any) => {
               <HeartWrapper>
                 <button
                   onClick={() => {
-                    wishListHandler(b.isbn);
+                    // wishListHandler(b.isbn);
                   }}
                 >
                   <HeartOutlined />
